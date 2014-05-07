@@ -51,7 +51,7 @@ public class Dragon : MonoBehaviour {
 			// FLY LITTLE DRAGON FLY!
 			rigidbody2D.gravityScale = 0f;
 			float x = transform.position.x + Time.deltaTime;
-			float y = transform.position.y + Mathf.PingPong(Time.time, 1f) * amplitude;
+			float y = transform.position.y + Mathf.PingPong(Time.time, .2f) * amplitude;
 			//float y = Mathf.Sin (x) * 1f;
 
 			transform.position = new Vector2(x,y);
