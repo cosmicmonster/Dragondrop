@@ -214,36 +214,15 @@ pip-log.txt
 #Mr Developer
 .mr.developer.cfg
 
-# =============== #
-# Unity generated #
-# =============== #
+# UNITY3D
+
 Temp/
-Obj/
-UnityGenerated/
 Library/
- 
-# ===================================== #
-# Visual Studio / MonoDevelop generated #
-# ===================================== #
-ExportedObj/
-*.svd
-*.userprefs
+Obj/
+
 *.csproj
-*.pidb
-*.suo
+*.unityproj
 *.sln
 *.user
-*.unityproj
-*.booproj
- 
-# ============ #
-# OS generated #
-# ============ #
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-Icon?
-ehthumbs.db
-Thumbs.db
+*.userprefs
+*.DS_store
