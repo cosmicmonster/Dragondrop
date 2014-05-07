@@ -623,6 +623,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3800ba1fd0cf85849908f50e0e290235, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startFlySkill: 90
+  startFlySkill: 0
   learnSpeed: 10
   States: 0
