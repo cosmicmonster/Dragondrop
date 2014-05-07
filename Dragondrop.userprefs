@@ -1,0 +1,14 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Dragon.cs">
+    <Files>
+      <File FileName="Assets\Scripts\MouseControl.cs" Line="46" Column="26" />
+      <File FileName="Assets\Scripts\Dragon.cs" Line="25" Column="41" />
+      <File FileName="Assets\Scripts\Wind.cs" Line="26" Column="3" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
