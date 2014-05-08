@@ -35,15 +35,22 @@ public class Dragon : MonoBehaviour {
 
 			if (!pauseTraining)
 			{
+				rigidbody2D.gravityScale = 1f;
+
 				if (flySkill < maxFlySkill) flySkill += learnSpeed * Time.deltaTime;
 				else  
 				{ 
 					flySkill = maxFlySkill; 
 					canFly = true;
 					Debug.Log ("Dragon has learnt to fly!!");
+					Score.score += Score.pointsPerDragon;
 				}
 
 				UpdateSkillBar();
+			}
+			else
+			{
+				rigidbody2D.gravityScale = 0;
 			}
 		}
 		else 
@@ -75,6 +82,6 @@ public class Dragon : MonoBehaviour {
 
 	public void PickUp() { pickedUp = true; }
 	public void LetGo() { pickedUp = false; }
-
+	private void OnDestroy () { Debug.Log ("Dragonling " + gameObject.GetInstanceID() + " has died :'("); }
 
 }

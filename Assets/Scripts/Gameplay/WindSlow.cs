@@ -43,6 +43,6 @@ public class WindSlow : MonoBehaviour {
 
 	void OnGUI ()
 	{
-		GUILayout.Label ((Time.time - spawnTime).ToString ());
+		//GUILayout.Label ((Time.time - spawnTime).ToString ());
 	}
 }

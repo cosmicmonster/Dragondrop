@@ -37,13 +37,19 @@ public class MouseControl : MonoBehaviour {
 			if(currentMouseOver)
 			{
 				Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-				currentMouseOver.transform.position = new Vector3(mousePos.x, mousePos.y, 1);
-				currentMouseOver.GetComponent<Dragon>().PickUp();
+				if (currentMouseOver.tag == "Dragon")
+				{
+					currentMouseOver.GetComponent<Dragon>().PickUp();
+					currentMouseOver.transform.position = new Vector3(mousePos.x, currentMouseOver.transform.position.y, 1);
+				}
+				else {
+					currentMouseOver.transform.position = new Vector3(mousePos.x, mousePos.y, 1);
+				}
 			}
 		} 
 		else if (Input.GetButtonUp("Fire1"))
 		{
-			if (currentMouseOver) currentMouseOver.GetComponent<Dragon>().LetGo();
+			if (currentMouseOver && currentMouseOver.GetComponent<Dragon>()) currentMouseOver.GetComponent<Dragon>().LetGo();
 			currentMouseOver = null;
 		}
 	}

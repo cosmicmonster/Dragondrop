@@ -47,6 +47,6 @@ public class WindGust : MonoBehaviour {
 
 	void OnGUI ()
 	{
-		GUILayout.Label ((Time.time - spawnTime).ToString ());
+		//GUILayout.Label ((Time.time - spawnTime).ToString ());
 	}
 }
