@@ -21,7 +21,6 @@ public class GameManager : MonoBehaviour {
 
 	void Update () 
 	{
-		print (dragons.Count);
 		if (dragons.Count < maxDragons && Time.time - lastSpawnTime > spawnDelay)
 		{
 			SpawnDragon ();

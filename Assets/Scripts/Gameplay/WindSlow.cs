@@ -23,13 +23,12 @@ public class WindSlow : MonoBehaviour {
 
 	void OnTriggerStay2D (Collider2D c)
 	{
-
-
 		if (c.gameObject.tag == "Dragon")
 		{
-			Debug.Log ("pffffffffff");
 			if ( !started ) { started = true; spawnTime = Time.time; }
-			c.rigidbody2D.AddForce(new Vector2(0, dampening));
+
+		 	if (c.gameObject.GetComponent<Dragon>().GetState() == Dragon.States.Idle) return;
+			else c.rigidbody2D.AddForce(new Vector2(0, dampening));
 		}
 	}
 
