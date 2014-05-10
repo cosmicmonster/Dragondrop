@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
 
-	public GameObject dragon;
-	public int maxDragons = 3;
-	public float minDelay = 2f,
-	maxDelay = 5f;
-
-	private List<GameObject> dragons = new List<GameObject>();
-	private float lastSpawnTime;
-	private float spawnDelay;
+	public GameObject 	dragon;
+	public Transform 	dragonSpawnPoint;
+	public int 			maxDragons = 3;
+	public float 		minDelay = 2f,
+						maxDelay = 5f;
+	
+	private float 		lastSpawnTime;
+	private float 		spawnDelay;
 	
 
 	void Start () 
@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour {
 
 	void Update () 
 	{
-		if (dragons.Count < maxDragons && Time.time - lastSpawnTime > spawnDelay)
+		if (Data.totalDragons < maxDragons && Time.time - lastSpawnTime > spawnDelay)
 		{
 			SpawnDragon ();
 		}
@@ -30,10 +30,10 @@ public class GameManager : MonoBehaviour {
 
 	private void SpawnDragon ()
 	{
-		GameObject tDragon = Instantiate(dragon, new Vector3 (0,0,1), Quaternion.identity) as GameObject;
-		dragons.Add(tDragon);
+		Instantiate(dragon, dragonSpawnPoint.position, Quaternion.identity);
 		lastSpawnTime = Time.time;
 		spawnDelay = Random.Range (minDelay, maxDelay);
+		Data.totalDragons++;
 	}
 
 }

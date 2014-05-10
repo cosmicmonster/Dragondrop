@@ -3,8 +3,13 @@ using System.Collections;
 
 public class Dragon : MonoBehaviour {
 
+
+	
 	public float startFlySkill;
 	public float learnSpeed;
+	public float walkAmount;
+	public float enteringSpeed;
+
 	public enum States { Idle, Entering, Flying, Learning };
 	public States State;
 
@@ -13,11 +18,14 @@ public class Dragon : MonoBehaviour {
 	private Transform skillBar;
 
 	private float amplitude;
+	private Vector3 startPos;
 
 	// Use this for initialization
 	void Start () 
 	{
+		startPos = transform.position;
 		State = States.Entering;
+		walkAmount = Random.Range ( 1f, 1.5f );
 		skillBar = transform.GetChild(0);
 		flySkill = startFlySkill;
 		amplitude = Random.Range ( 0.05f, 0.02f );
@@ -54,7 +62,7 @@ public class Dragon : MonoBehaviour {
 		{ 
 			flySkill = maxFlySkill; 
 			Debug.Log ("Dragon has learnt to fly!!");
-			Score.score += Score.pointsPerDragon;
+			Data.score += Data.pointsPerDragon;
 			State = States.Flying;
 		}
 		
@@ -65,7 +73,9 @@ public class Dragon : MonoBehaviour {
 	// After spawning the dragon moves into the screen
 	private void Entering ()
 	{
+		transform.position = Vector3.Lerp ( transform.position, new Vector3 ( startPos.x + walkAmount, transform.position.y ), Time.deltaTime );
 
+		Invoke ("StartIdle", 2f); 
 	}
 
 
@@ -78,6 +88,11 @@ public class Dragon : MonoBehaviour {
 		float y = transform.position.y + Mathf.PingPong(Time.time, .2f) * amplitude;
 		
 		transform.position = new Vector2(x,y);
+	}
+
+	private void StartIdle ()
+	{
+		State = States.Idle;
 	}
 
 	// When being dragged, don't do anything
@@ -101,17 +116,17 @@ public class Dragon : MonoBehaviour {
 
 	void OnCollisionStay2D (Collision2D c)
 	{
-		if (c.gameObject.tag == "Level") State = States.Idle;
+		if (c.gameObject.tag == "Level" && State != States.Entering) State = States.Idle;
 	}
 
 	void OnCollisionExit2D (Collision2D c)
 	{
-		State = States.Learning;
+		if (c.gameObject.tag != "Dragon") State = States.Learning;
 	}
 
 	public void PickUp() { State = States.Idle; }
 	public void LetGo() {State = States.Learning; }
 	public States GetState () { return State; }
-	//private void OnDestroy () { Debug.Log ("Dragonling " + gameObject.GetInstanceID() + " has died :'("); }
+	private void OnDestroy () { Data.totalDragons--; }
 
 }

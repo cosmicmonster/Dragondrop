@@ -13,7 +13,7 @@ public class ScoreDisplay : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		if (currentScore != 0) Score.score = currentScore;
+		if (currentScore != 0) Data.score = currentScore;
 	}
 	
 	// Update is called once per frame
@@ -25,7 +25,7 @@ public class ScoreDisplay : MonoBehaviour {
 	void DispayScore ()
 	{
 		// Convert to score to text for handling
-		string score = Score.score.ToString();
+		string score = Data.score.ToString();
 
 		// Check how many numbers the score has
 		int scoreLength = score.Length;
