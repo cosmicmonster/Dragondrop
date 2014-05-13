@@ -2,8 +2,6 @@
 using System.Collections;
 
 public class Dragon : MonoBehaviour {
-
-
 	
 	public float startFlySkill;
 	public float learnSpeed;
@@ -56,6 +54,8 @@ public class Dragon : MonoBehaviour {
 	private void Learning ()
 	{
 		rigidbody2D.gravityScale = 1f;
+
+		CancelInvoke ();
 		
 		if (flySkill < maxFlySkill) flySkill += learnSpeed * Time.deltaTime;
 		else  
@@ -63,6 +63,9 @@ public class Dragon : MonoBehaviour {
 			flySkill = maxFlySkill; 
 			Debug.Log ("Dragon has learnt to fly!!");
 			Data.score += Data.pointsPerDragon;
+
+			// Hide Skill bar elements
+			HideChildren ();
 			State = States.Flying;
 		}
 		
@@ -103,7 +106,7 @@ public class Dragon : MonoBehaviour {
 	
 	private void UpdateSkillBar ()
 	{
-		if (!skillBar.gameObject.activeSelf) 
+		if (!skillBar.gameObject.activeSelf && State != States.Flying) 
 		{
 			skillBar.gameObject.SetActive ( true );
 			transform.GetChild(1).gameObject.SetActive ( true ); 
@@ -124,8 +127,16 @@ public class Dragon : MonoBehaviour {
 		if (c.gameObject.tag != "Dragon") State = States.Learning;
 	}
 
-	public void PickUp() { State = States.Idle; }
-	public void LetGo() {State = States.Learning; }
+	private void HideChildren ()
+	{
+		foreach ( Transform t in transform )
+		{
+			t.gameObject.SetActive ( false );
+		}
+	}
+	
+	public void Drag() { State = States.Idle; }
+	public void Drop() {State = States.Learning; }
 	public States GetState () { return State; }
 	private void OnDestroy () { Data.totalDragons--; }
 
