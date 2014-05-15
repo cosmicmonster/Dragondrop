@@ -5,14 +5,17 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour {
 
 	public GameObject 	dragon;
-	public GameObject	windSlow;
+	public GameObject	wind;
 
 	public Transform 	dragonSpawnPoint;
 	public Transform	windSlowSpawnPoint;
 
 	public int 			maxDragons = 3;
-	public float 		minDelay = 2f,
-						maxDelay = 5f;
+	public float 		dragonSpawnMinDelay = 2f,
+						dragonSpawnMaxDelay = 5f;
+
+	public float		spawnWindMinDelay = 3f,
+						spawnWindMaxDelay = 5f;
 	
 	private float 		lastSpawnTime;
 	private float 		spawnDelay;
@@ -21,6 +24,7 @@ public class GameManager : MonoBehaviour {
 	void Start () 
 	{
 		//ScaleSprite ();
+		SpawnWind();
 	}
 
 	void Update () 
@@ -30,25 +34,22 @@ public class GameManager : MonoBehaviour {
 			SpawnDragon ();
 		}
 	}
-
-
+	
 	private void SpawnDragon ()
 	{
 		Instantiate(dragon, dragonSpawnPoint.position, Quaternion.identity);
 		lastSpawnTime = Time.time;
-		spawnDelay = Random.Range (minDelay, maxDelay);
+		spawnDelay = Random.Range (dragonSpawnMinDelay, dragonSpawnMaxDelay);
 		Data.totalDragons++;
 	}
 
-	private void SpawnWindSlow ()
+	private void SpawnWind()
 	{
-
+		Vector2 sp = Random.Range(0,2) > 0 ? new Vector2( -10, Random.Range ( -4, 3 )) :  new Vector2( 10, Random.Range ( -4, 3 ) );
 
 		// Create object
-		Instantiate(windSlow, windSlowSpawnPoint.position, Quaternion.identity);
-		// Spawn another wind after 5 seconds. This is most likely going
-		// to depend on at least a couple of factors
-		Invoke ("SpawnWindSlow", 5);
+		Instantiate(wind, sp, Quaternion.identity);
+		Invoke ("SpawnWind", Random.Range (spawnWindMinDelay, spawnWindMaxDelay));
 	}
 
 	private void ScaleSprite ()

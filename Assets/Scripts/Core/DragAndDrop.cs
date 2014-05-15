@@ -35,6 +35,11 @@ public class DragAndDrop : MonoBehaviour {
 			{
 				currentObject.gameObject.GetComponent<Dragon>().Drop();
 			}
+			else if (currentObject.gameObject.tag == "Wind")
+			{
+				currentObject.gameObject.GetComponent<Wind>().Drop();
+			}
+
 
 			currentObject = null;
 		}
@@ -46,8 +51,9 @@ public class DragAndDrop : MonoBehaviour {
 				currentObject.gameObject.GetComponent<Dragon>().Drag();
 				currentObject.position = new Vector3(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, currentObject.position.y, currentObject.position.z);
 			} 
-			else 
+			else if (currentObject.gameObject.tag == "Wind")
 			{
+				currentObject.gameObject.GetComponent<Wind>().Drag();
 				currentObject.position = new Vector3(Camera.main.ScreenToWorldPoint(Input.mousePosition).x + offSetX, Camera.main.ScreenToWorldPoint(Input.mousePosition).y + offSetY, currentObject.position.z);
 			}
 

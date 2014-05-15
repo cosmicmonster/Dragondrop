@@ -13,7 +13,7 @@ public class Bounds : MonoBehaviour {
 	
 	}
 
-	void OnCollisionStay2D (Collision2D c)
+	void OnCollisionEnter2D (Collision2D c)
 	{
 		if (c.gameObject.tag == "Dragon") Destroy(c.gameObject);
 	}
