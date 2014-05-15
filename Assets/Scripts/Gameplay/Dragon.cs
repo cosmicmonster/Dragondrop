@@ -23,7 +23,7 @@ public class Dragon : MonoBehaviour {
 	{
 		startPos = transform.position;
 		State = States.Entering;
-		walkAmount = Random.Range ( 1f, 1.5f );
+		walkAmount = walkAmount + Random.Range ( 1f, 1.5f );
 		skillBar = transform.GetChild(0);
 		flySkill = startFlySkill;
 		amplitude = Random.Range ( 0.05f, 0.02f );
