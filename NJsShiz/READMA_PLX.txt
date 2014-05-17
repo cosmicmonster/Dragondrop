@@ -1,0 +1,11 @@
+Here are the frame durations for each animation image (assuming game runs on 60fps):
+
+DragonStand (sprite for when they are sitting in the nest - not animated for now)
+DragonDrag (sprite for when the dragon is being dragged - not animated for now)
+DragonFlap (this is the one where the poor thing struggles to stay airborne): 1 frame per image
+DragonFlyOff (this is when the dragon is no longer a padawan and learns to fly off): 3 frames per image
+Wind (blowin some steam): 2 frames per image
+
+Penis (object of desire): As many frames per second as possible
+
+kthankxhugzbye
