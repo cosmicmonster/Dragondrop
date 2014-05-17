@@ -6,9 +6,13 @@ public class GameManager : MonoBehaviour {
 
 	public GameObject 	dragon;
 	public GameObject	wind;
+	public GameObject	ui;
+	public Timer		timer;
 
 	public Transform 	dragonSpawnPoint;
 	public Transform	windSlowSpawnPoint;
+
+	public float		gameDuration = 60f;
 
 	public int 			maxDragons = 3;
 	public float 		dragonSpawnMinDelay = 2f,
@@ -19,20 +23,41 @@ public class GameManager : MonoBehaviour {
 	
 	private float 		lastSpawnTime;
 	private float 		spawnDelay;
+
+	private bool 		gameOver = false;
 	
 
 	void Start () 
 	{
 		//ScaleSprite ();
+		timer.StartTimer ( gameDuration );
 		SpawnWind();
 	}
 
 	void Update () 
-	{
+	{	
+		if ( gameOver ) return;
+
 		if (Data.totalDragons < maxDragons && Time.time - lastSpawnTime > spawnDelay)
 		{
 			SpawnDragon ();
 		}
+
+
+		// Check if Time is up
+		if ( timer.IsDone () )
+		{
+			Camera.main.gameObject.GetComponent<Animator>().Play ("camera_gameover");
+			Invoke ("AnimateScore", .5f);
+			gameOver = true;
+		}
+	}
+
+	private void AnimateScore ()
+	{
+		ui.SetActive ( true );
+		//ui.GetComponent<HiScore>().Show ();
+		ui.GetComponent<Animator>().Play ("hi_score");
 	}
 	
 	private void SpawnDragon ()
@@ -45,28 +70,11 @@ public class GameManager : MonoBehaviour {
 
 	private void SpawnWind()
 	{
+		if ( gameOver ) return;
 		Vector2 sp = Random.Range(0,2) > 0 ? new Vector2( -10, Random.Range ( -4, 3 )) :  new Vector2( 10, Random.Range ( -4, 3 ) );
 
 		// Create object
 		Instantiate(wind, sp, Quaternion.identity);
 		Invoke ("SpawnWind", Random.Range (spawnWindMinDelay, spawnWindMaxDelay));
 	}
-
-	private void ScaleSprite ()
-	{
-		Transform screenTest = null;
-		if (!screenTest) return;
-
-		SpriteRenderer sr = screenTest.GetComponent<SpriteRenderer>();
-		if (sr == null) return;
-				
-		float width = sr.sprite.bounds.size.x;
-		float height = sr.sprite.bounds.size.y;
-		
-		float worldScreenHeight = Camera.main.orthographicSize * 2.0f;
-		float worldScreenWidth = worldScreenHeight / Screen.height * Screen.width;
-		
-		screenTest.transform.localScale = new Vector3( worldScreenWidth / width, worldScreenHeight / height );
-	}
-
 }

@@ -39,7 +39,19 @@ public class DragAndDrop : MonoBehaviour {
 			{
 				currentObject.gameObject.GetComponent<Wind>().Drop();
 			}
-
+			else if (currentObject.gameObject.name == "Restart Button")
+			{
+				Application.LoadLevel ("Game");
+			}
+			else if (currentObject.gameObject.name == "Play Button")
+			{
+				Application.LoadLevel ("Game");
+			}
+			else if (currentObject.gameObject.name == "Quit Button")
+			{
+				Application.Quit ();
+			}
+			
 
 			currentObject = null;
 		}

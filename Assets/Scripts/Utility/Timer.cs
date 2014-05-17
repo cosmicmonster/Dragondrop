@@ -5,20 +5,19 @@ public class Timer : MonoBehaviour {
 
 	public GameObject blocker, foreground;
 
-	public float timerDuration = 10f;
+	private float timerDuration;
 	private float degreesPerSecond;
 
 	private float timePassed;
+	private bool running = false;
+	private bool isDone = false;
 
-	// Use this for initialization
-	void Start () {
-		degreesPerSecond = 360 / timerDuration; // Based on how long it takes to make a full scirlce in 1 minute, degrees per second
-	}
-	
 	// Update is called once per frame
-	void Update () {
-
-		timePassed = Time.time % timerDuration;
+	void Update () 
+	{
+		if ( !running || isDone ) return;
+		
+		timePassed = Time.timeSinceLevelLoad % timerDuration;
 
 		if (timePassed < timerDuration/2)
 		{
@@ -36,11 +35,17 @@ public class Timer : MonoBehaviour {
 			foreground.transform.rotation = Quaternion.AngleAxis (-timePassed * degreesPerSecond, Vector3.forward);
 		}
 
+		if (timerDuration - timePassed <= Time.deltaTime) isDone = true;
+
 	}
 
-
-	void OnGUI ()
+	public void StartTimer (float time)
 	{
-		GUILayout.Label (timePassed.ToString());
+		timerDuration = time;
+		degreesPerSecond = 360 / timerDuration; // Based on how long it takes to make a full scirlce in 1 minute, degrees per second
+
+		running = true;
 	}
+
+	public bool IsDone (){ return isDone; }
 }
