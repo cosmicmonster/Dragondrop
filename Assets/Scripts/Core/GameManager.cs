@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour {
 	public GameObject 	dragon;
 	public GameObject	wind;
 	public GameObject	ui;
+	public GUIText		score;
+	public GUIText		countDownText;
 	public Timer		timer;
 
 	public Transform 	dragonSpawnPoint;
@@ -25,18 +27,28 @@ public class GameManager : MonoBehaviour {
 	private float 		spawnDelay;
 
 	private bool 		gameOver = false;
+	private bool		countdown = true;
 	
 
 	void Start () 
 	{
 		//ScaleSprite ();
-		timer.StartTimer ( gameDuration );
-		SpawnWind();
+
 	}
 
 	void Update () 
 	{	
 		if ( gameOver ) return;
+		else if ( countdown ) 
+		{
+			Countdown ();
+			return;
+		}
+
+		if (!timer.IsRunning () && !timer.IsDone ())
+		{
+
+		}
 
 		if (Data.totalDragons < maxDragons && Time.time - lastSpawnTime > spawnDelay)
 		{
@@ -51,8 +63,31 @@ public class GameManager : MonoBehaviour {
 			Invoke ("AnimateScore", .5f);
 			gameOver = true;
 		}
+
+		// Show current score on GUI Text Element
+		score.text = Data.score.ToString();
 	}
 
+	private void Countdown ()
+	{
+		int cd = Mathf.CeilToInt(Data.countdownTime - Time.timeSinceLevelLoad);
+
+		countDownText.text = cd.ToString();
+
+		if (cd <= 0) {
+			StartGame ();
+		}
+	}
+
+	private void StartGame ()
+	{
+		countdown = false;
+		countDownText.gameObject.SetActive ( false );
+		timer.gameObject.SetActive ( true );
+		timer.StartTimer ( gameDuration );
+		SpawnWind();
+	}
+	
 	private void AnimateScore ()
 	{
 		ui.SetActive ( true );
@@ -71,10 +106,28 @@ public class GameManager : MonoBehaviour {
 	private void SpawnWind()
 	{
 		if ( gameOver ) return;
-		Vector2 sp = Random.Range(0,2) > 0 ? new Vector2( -10, Random.Range ( -4, 3 )) :  new Vector2( 10, Random.Range ( -4, 3 ) );
+		Vector2 sp = Random.Range(0,2) > 0 ? new Vector2( -10, Random.Range ( -3, .8f )) :  new Vector2( 10, Random.Range ( -3, .8f ) );
 
 		// Create object
 		Instantiate(wind, sp, Quaternion.identity);
 		Invoke ("SpawnWind", Random.Range (spawnWindMinDelay, spawnWindMaxDelay));
+	}
+
+	void OnGUI ()
+	{
+		if ( Application.isEditor )
+		{
+			GUILayout.Label ("DEBUGTONS");
+			if (GUILayout.Button ("Reset Hi-Score"))
+			{
+				PlayerPrefs.SetInt ("HiScore", 0);
+				Debug.Log ("Reset Hi-Score");
+			}
+			if (GUILayout.Button ("+100"))
+			{
+				Data.score += 100;
+				Debug.Log (Data.score);
+			}
+		}
 	}
 }

@@ -8,7 +8,7 @@ public class Dragon : MonoBehaviour {
 	public float walkAmount;
 	public float enteringSpeed;
 
-	public enum States { Idle, Entering, Flying, Learning };
+	public enum States { Waiting, Dragging, Entering, Flying, Learning };
 	public States State;
 
 	private float flySkill = 0f;
@@ -18,9 +18,12 @@ public class Dragon : MonoBehaviour {
 	private float amplitude;
 	private Vector3 startPos;
 
+	private Animator anim;
+
 	// Use this for initialization
 	void Start () 
 	{
+		anim = GetComponent<Animator>();
 		startPos = transform.position;
 		State = States.Entering;
 		walkAmount = walkAmount + Random.Range ( 1f, 1.5f );
@@ -34,8 +37,11 @@ public class Dragon : MonoBehaviour {
 	{
 		switch ( State )
 		{
-		case States.Idle:
-			Idle ();
+		case States.Waiting:
+			Waiting ();
+			break;
+		case States.Dragging:
+			Dragging ();
 			break;
 		case States.Entering:
 			Entering ();
@@ -67,6 +73,8 @@ public class Dragon : MonoBehaviour {
 			// Hide Skill bar elements
 			HideChildren ();
 			State = States.Flying;
+			anim.Play ("dragon_flying");
+
 		}
 		
 		UpdateSkillBar();
@@ -78,7 +86,9 @@ public class Dragon : MonoBehaviour {
 	{
 		transform.position = Vector3.Lerp ( transform.position, new Vector3 ( startPos.x + walkAmount, transform.position.y ), Time.deltaTime );
 
-		Invoke ("StartIdle", 2f); 
+		anim.Play ("dragon_idle");
+
+		Invoke ("StartWaiting", 2f); 
 	}
 
 
@@ -93,13 +103,20 @@ public class Dragon : MonoBehaviour {
 		transform.position = new Vector2(x,y);
 	}
 
-	private void StartIdle ()
+	private void StartWaiting ()
 	{
-		State = States.Idle;
+		State = States.Waiting;
+
+		anim.Play ("dragon_idle");
 	}
 
 	// When being dragged, don't do anything
-	private void Idle ()
+	private void Waiting ()
+	{
+		rigidbody2D.gravityScale = 0;
+	}
+
+	private void Dragging ()
 	{
 		rigidbody2D.gravityScale = 0;
 	}
@@ -119,12 +136,19 @@ public class Dragon : MonoBehaviour {
 
 	void OnCollisionStay2D (Collision2D c)
 	{
-		if (c.gameObject.tag == "Level" && State != States.Entering) State = States.Idle;
+		if (c.gameObject.tag == "Level" && State != States.Entering && State != States.Dragging) 
+		{
+			State = States.Waiting;
+			anim.Play ("dragon_idle");
+		}
 	}
 
 	void OnCollisionExit2D (Collision2D c)
 	{
-		if (c.gameObject.tag != "Dragon") State = States.Learning;
+		if (c.gameObject.tag != "Dragon" && State != States.Dragging ) 
+		{
+			State = States.Learning;
+		}
 	}
 
 	private void HideChildren ()
@@ -135,8 +159,8 @@ public class Dragon : MonoBehaviour {
 		}
 	}
 	
-	public void Drag() { State = States.Idle; }
-	public void Drop() {State = States.Learning; }
+	public void Drag() { State = States.Dragging; anim.Play ("dragon_drag"); CancelInvoke ();}
+	public void Drop() {State = States.Learning; anim.Play ("dragon_learning");}
 	public States GetState () { return State; }
 	private void OnDestroy () { Data.totalDragons--; }
 

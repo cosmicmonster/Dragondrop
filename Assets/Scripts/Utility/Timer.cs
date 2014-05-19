@@ -17,7 +17,7 @@ public class Timer : MonoBehaviour {
 	{
 		if ( !running || isDone ) return;
 		
-		timePassed = Time.timeSinceLevelLoad % timerDuration;
+		timePassed = Time.timeSinceLevelLoad-Data.countdownTime % timerDuration;
 
 		if (timePassed < timerDuration/2)
 		{
@@ -47,5 +47,6 @@ public class Timer : MonoBehaviour {
 		running = true;
 	}
 
+	public bool IsRunning (){ return running; }
 	public bool IsDone (){ return isDone; }
 }
