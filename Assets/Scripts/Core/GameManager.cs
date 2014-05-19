@@ -30,10 +30,10 @@ public class GameManager : MonoBehaviour {
 	private bool		countdown = true;
 	
 
-	void Start () 
+	void Awake () 
 	{
 		//ScaleSprite ();
-
+		Application.targetFrameRate = 60;
 	}
 
 	void Update () 
