@@ -7,6 +7,7 @@ public class Dragon : MonoBehaviour {
 	public float learnSpeed;
 	public float walkAmount;
 	public float enteringSpeed;
+	public int	 points;
 
 	public enum States { Waiting, Dragging, Entering, Flying, Learning };
 	public States State;
@@ -20,9 +21,16 @@ public class Dragon : MonoBehaviour {
 
 	private Animator anim;
 
+	private string dColor;
+
 	// Use this for initialization
 	void Start () 
 	{
+		if (gameObject.name == "Dragon Normal") dColor = "_purple";
+		else if (gameObject.name == "Dragon Big") dColor = "_red";
+		else if (gameObject.name == "Dragon Small") dColor = "_green";
+
+
 		anim = GetComponent<Animator>();
 		startPos = transform.position;
 		State = States.Entering;
@@ -73,8 +81,9 @@ public class Dragon : MonoBehaviour {
 			// Hide Skill bar elements
 			HideChildren ();
 			State = States.Flying;
-			anim.Play ("dragon_flying");
-
+			anim.Play ("dragon_fly" + dColor);
+			rigidbody2D.collider2D.enabled = false;
+			Data.totalDragons--;
 		}
 		
 		UpdateSkillBar();
@@ -86,7 +95,7 @@ public class Dragon : MonoBehaviour {
 	{
 		transform.position = Vector3.Lerp ( transform.position, new Vector3 ( startPos.x + walkAmount, transform.position.y ), Time.deltaTime );
 
-		anim.Play ("dragon_idle");
+		anim.Play ("dragon_idle" + dColor);
 
 		Invoke ("StartWaiting", 2f); 
 	}
@@ -107,7 +116,7 @@ public class Dragon : MonoBehaviour {
 	{
 		State = States.Waiting;
 
-		anim.Play ("dragon_idle");
+		anim.Play ("dragon_idle" + dColor);
 	}
 
 	// When being dragged, don't do anything
@@ -139,7 +148,7 @@ public class Dragon : MonoBehaviour {
 		if (c.gameObject.tag == "Level" && State != States.Entering && State != States.Dragging) 
 		{
 			State = States.Waiting;
-			anim.Play ("dragon_idle");
+			anim.Play ("dragon_idle" + dColor);
 		}
 	}
 
@@ -148,6 +157,7 @@ public class Dragon : MonoBehaviour {
 		if (c.gameObject.tag != "Dragon" && State != States.Dragging ) 
 		{
 			State = States.Learning;
+			anim.Play ("dragon_learn" + dColor);
 		}
 	}
 
@@ -159,8 +169,8 @@ public class Dragon : MonoBehaviour {
 		}
 	}
 	
-	public void Drag() { State = States.Dragging; anim.Play ("dragon_drag"); CancelInvoke ();}
-	public void Drop() {State = States.Learning; anim.Play ("dragon_learning");}
+	public void Drag() { State = States.Dragging; anim.Play ("dragon_drag" + dColor); CancelInvoke (); rigidbody2D.isKinematic = true; collider2D.isTrigger = true;}
+	public void Drop() {State = States.Learning; anim.Play ("dragon_learn" + dColor); rigidbody2D.isKinematic = false; collider2D.isTrigger = false;}
 	public States GetState () { return State; }
 	private void OnDestroy () { Data.totalDragons--; }
 

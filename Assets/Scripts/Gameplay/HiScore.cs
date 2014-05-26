@@ -13,7 +13,6 @@ public class HiScore : MonoBehaviour {
 	void Awake ()
 	{
 		currentHiScore = PlayerPrefs.GetInt ("HiScore", 0);
-		print (currentHiScore);
 
 		gameObject.SetActive ( false );
 	}

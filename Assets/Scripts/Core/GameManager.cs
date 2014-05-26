@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
 
-	public GameObject 	dragon;
+	public GameObject[] dragons;
 	public GameObject	wind;
 	public GameObject	ui;
 	public GUIText		score;
@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour {
 	{
 		//ScaleSprite ();
 		Application.targetFrameRate = 60;
+		Data.score = 0;
 	}
 
 	void Update () 
@@ -97,7 +98,13 @@ public class GameManager : MonoBehaviour {
 	
 	private void SpawnDragon ()
 	{
-		Instantiate(dragon, dragonSpawnPoint.position, Quaternion.identity);
+		int rndDragon = Random.Range(0,dragons.Length);
+		GameObject d = Instantiate(dragons[rndDragon], dragonSpawnPoint.position, Quaternion.identity) as GameObject;
+
+		if (rndDragon == 0) d.name = "Dragon Small";
+		else if (rndDragon == 1) d.name = "Dragon Normal";
+		else d.name = "Dragon Big";
+
 		lastSpawnTime = Time.time;
 		spawnDelay = Random.Range (dragonSpawnMinDelay, dragonSpawnMaxDelay);
 		Data.totalDragons++;
@@ -115,7 +122,7 @@ public class GameManager : MonoBehaviour {
 
 	void OnGUI ()
 	{
-		if ( Application.isEditor )
+		/*if ( Application.isEditor )
 		{
 			GUILayout.Label ("DEBUGTONS");
 			if (GUILayout.Button ("Reset Hi-Score"))
@@ -128,6 +135,6 @@ public class GameManager : MonoBehaviour {
 				Data.score += 100;
 				Debug.Log (Data.score);
 			}
-		}
+		}*/
 	}
 }

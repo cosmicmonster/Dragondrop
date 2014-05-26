@@ -9,8 +9,10 @@ public class WindSlow : MonoBehaviour {
 	{
 		if (c.gameObject.tag == "Dragon")
 		{
-		 	if (c.gameObject.GetComponent<Dragon>().GetState() == Dragon.States.Dragging) return;
-			else c.rigidbody2D.AddForce(new Vector2(0, dampening));
+		 	if (c.gameObject.GetComponent<Dragon>().GetState() == Dragon.States.Learning)
+			{
+				c.rigidbody2D.AddForce(new Vector2(0, dampening));
+			}
 		}
 	}
 }
