@@ -4,6 +4,7 @@ using System.Collections;
 public class Timer : MonoBehaviour {
 
 	public GameObject blocker, foreground;
+	public GUIText guiText;
 
 	private float timerDuration;
 	private float degreesPerSecond;
@@ -17,7 +18,7 @@ public class Timer : MonoBehaviour {
 	{
 		if ( !running || isDone ) return;
 		
-		timePassed = Time.timeSinceLevelLoad-Data.countdownTime % timerDuration;
+		timePassed = Time.timeSinceLevelLoad-Data.countdownTime-Data.penalty % timerDuration;
 
 		if (timePassed < timerDuration/2)
 		{
@@ -36,7 +37,7 @@ public class Timer : MonoBehaviour {
 		}
 
 		if (timerDuration - timePassed <= Time.deltaTime) isDone = true;
-
+		guiText.text = Mathf.RoundToInt(timerDuration - timePassed).ToString();
 	}
 
 	public void StartTimer (float time)

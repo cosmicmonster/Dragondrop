@@ -24,6 +24,10 @@ public class DragAndDrop : MonoBehaviour {
 					offSetX = currentObject.position.x - hit.point.x;
 					offSetY = currentObject.position.y - hit.point.y; 
 					//Debug.Log ( Vector3.Distance( currentObject.position, hit.point.x ));
+					if (hit.transform.gameObject.GetComponent<MouseOverAnimation>())
+					{
+						hit.transform.gameObject.GetComponent<Animator>().Play ("MouseOver");
+					}
 				}	
 			}
 		}
